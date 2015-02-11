@@ -1,0 +1,123 @@
+---
+title: "Homework 2: Visualizing data"
+author: "your name here"
+date: "Due: Sunday, Feb 15, 2015"
+output: html_document
+---
+
+Topics covered in this homework include:
+
+- data tidying
+- dplyr 
+- ggplot2
+
+
+### Let's return to Prof. Rodriguez's final exam from last semester.  Now you will redo some of the same problems using dplyr and ggplot2.
+
+From your exam: "The data fraem Robey in the `car` package has data on fertility and contraceptive use in 50 developing countries around 1990.  There are three variables (1) region, a factor with four levels (Africa, Asia, Latin America, and Near East) (2) tfr, the total fertiility rate, the average number of children that a women would have over her lifetime at current rates (usually abbreviated TFR), and (3) contraceptors, the precentage of contraception among women of childbearing age."
+
+(@) **"Let us say that a country has undergone a contraceptive revolution when at least half of the women in childbearing age use contraception.  Calculate and plot the proportion of countries that have achived this milestone by region."  Be sure to use dplyr and ggplot2.**
+
+```{r}
+# [your code here]
+```
+
+(@) **"Compute the average TFR in each region and plot your results."  Be sure to use dplyr and ggplot2.**
+
+```{r}
+# [your code here]
+```
+
+(@) **"Plot the TFR against the proportion of married women using contraception and superimpose a regression line." **
+
+```{r}
+# [your code here]
+```
+
+(@) **Next, create the same plot but with 4 factets, one for each region. **
+
+```{r}
+# [your code here]
+```
+
+(@) **In words, what would you conclude from the graph above. **
+
+```{answer}
+your answer here
+```
+
+### Next you are going to reproduce and extend this graph by Brad Boehmke that shows median income growth rate by state.
+
+<src img="images/median_income_trends.png">
+
+You can read about it and see all of his code here: https://rpubs.com/bradleyboehmke/median_income_trends
+
+The start code below gets you to where Brad Boehmke's code begins.  
+
+```{r echo=FALSE}
+# Preprocessing & summarizing data
+library(dplyr)
+library(tidyr)
+
+# Visualizatin development
+library(grid)
+library(scales)
+library(ggplot2)
+
+library(xlsx)
+# h08.xls is the spreadsheet that was downlaoded from the census website
+# https://www.census.gov/hhes/www/income/data/historical/household/2013/h08.xls
+data <- read.xlsx("data/h08.xls", sheetName="h08",
+                  startRow=62, endRow=113, header=FALSE)
+
+# remove all standard error columns
+se.columns <- seq(from=3, to=61, by=2)
+data <- select(data, -se.columns)
+
+# check size
+if (ncol(data) != 31) {
+  # state + 30 years (1984 - 2013)
+  stop("ERROR: ncol(data) != 31")
+}
+if (nrow(data) != 52) {
+  # 50 states + plus DC + US
+  stop("ERROR: nrow(data) != 52")
+}
+
+# create column names
+years <- seq(from = 2013, to = 1984)
+years.with.x <- paste("X", years, sep="")
+c.names <- c("State", years.with.x)
+colnames(data) <- c.names
+
+# check that data is the same as the data file he is using
+print(data)
+```
+
+(@) Write code to reproduce the graph above.  
+
+A few notes:
+
+- In the past we have recommended using `tbl_df()` but we don't recommend that here because it will conflict with some of the way Boehmke wrote his code.  If you want to use tbl_df() you will need to rewrite some of Boehmke's code.
+
+- In step 7 of the code, you should do as much as possible with ggplot2.  Do not use illustrator or any other program.  We want to avoid things that are not automated.
+
+
+```{r}
+# [your code here]
+```
+
+(@) Modify or extend the graph somehow.
+
+```{r}
+# [your code here]
+```
+
+
+#### The command below is helpful for debugging, please don't change it
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
